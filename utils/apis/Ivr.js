@@ -35,7 +35,7 @@ export class Ivr {
   }
 
   async getUserId(username) {
-    const cachedName = (await bot.db.query(`SELECT userId FROM users WHERE username = ?`, [username.toLowerCase()]))?.userId || null;
+    const cachedName = (await bot.db.queryOne('SELECT userId FROM users WHERE username = ?', [username.toLowerCase()]))?.userId || null;
     if (cachedName) {
       return cachedName;
     }
@@ -44,7 +44,7 @@ export class Ivr {
     const userId = user?.id || null;
 
     if (userId) {
-      bot.db.query(`INSERT INTO users (userId, username) VALUES (?, ?) ON DUPLICATE KEY UPDATE username = VALUES(username)`, [userId, username.toLowerCase()]);
+      bot.db.query('INSERT INTO users (userId, username) VALUES (?, ?) ON DUPLICATE KEY UPDATE username = VALUES(username)', [userId, username.toLowerCase()]);
     }
 
     return userId;
